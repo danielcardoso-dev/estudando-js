@@ -5,8 +5,15 @@ const visor = document.querySelector("#visor");
 
 for(let btn of btns) {
     btn.addEventListener("click", (evento) => {
-        const num = evento.target.innerText;
-        visor.value += num;
+        const display = visor.value;
+        const text = evento.target.innerText;
+        const ultimo = display[display.length-1]; // ultimo valor do display
+        if(isOperator(text) && isOperator(ultimo)) {
+            visor.value = display.slice(0, display.length-1) + text;
+        }
+        else {
+            visor.value += text;
+        }
     });
 }
 
@@ -15,7 +22,19 @@ btnAC.addEventListener("click", () => {
 });
 
 btnCalc.addEventListener("click", () => {
-    let expressao = visor.value.replaceAll(",",".");
-    let resultado =  eval(expressao).toString().replaceAll(",",".");
+    let expressao = visor.value.replaceAll(",", ".");
+    let resultado = eval(expressao).toString().replaceAll(".",",");
     visor.value = resultado;
 })
+
+function isOperator(text) {
+    switch(text) {
+        case "+":
+        case "-":
+        case "/":
+        case "*":
+            return true;
+        default:
+            return false;
+    }
+}
